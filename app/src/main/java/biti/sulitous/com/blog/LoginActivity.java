@@ -32,14 +32,11 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText mLoginEmailField,mLoginPasswordField;
-    private Button mLoginBtn;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabaseUsers;
 
     private ProgressDialog mProgress;
-
-    private SignInButton mGoogleBtn;
 
     private static final int RC_SIGN_IN = 1;
 
@@ -58,13 +55,23 @@ public class LoginActivity extends AppCompatActivity {
 
         mLoginEmailField = (EditText) findViewById(R.id.loginEmailField);
         mLoginPasswordField = (EditText) findViewById(R.id.loginPasswordField);
-        mLoginBtn = (Button) findViewById(R.id.loginBtn);
-        mGoogleBtn = (SignInButton) findViewById(R.id.googleBtn);
+        Button mLoginBtn = (Button) findViewById(R.id.loginBtn);
+        Button mNewAccountBtn = (Button) findViewById(R.id.newAccountBtn);
+        SignInButton mGoogleBtn = (SignInButton) findViewById(R.id.googleBtn);
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 checkLogin();
+            }
+        });
+
+        mNewAccountBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent registerIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                registerIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(registerIntent);
             }
         });
 

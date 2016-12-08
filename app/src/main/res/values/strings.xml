@@ -16,4 +16,7 @@
     <string name="setup">Finish Setup</string>
     <string name="finish">Finishing Setup…</string>
     <string name="start">Starting Sign in…</string>
+    <string name="post_goes_here">Post goes here</string>
+    <string name="post_desc_here">Post desc here</string>
+    <string name="username">UserName</string>
 </resources>

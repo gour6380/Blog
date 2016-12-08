@@ -21,7 +21,7 @@
         <TextView android:id="@+id/post_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post goes here"
+            android:text="@string/post_goes_here"
             android:textStyle="bold"
             android:paddingBottom="16dp"
             android:paddingEnd="16dp"
@@ -32,8 +32,41 @@
         <TextView android:id="@+id/post_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Post desc here"
+            android:text="@string/post_desc_here"
             android:padding="16dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:paddingEnd="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingStart="16dp"
+            android:text="@string/username"
+            android:textStyle="bold"
+            android:id="@+id/post_username" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/like_gray"
+                android:background="@color/colorPrimaryDark"
+                android:paddingBottom="16dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:id="@+id/like_btn" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

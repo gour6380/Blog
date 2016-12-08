@@ -1,19 +1,20 @@
 package biti.sulitous.com.blog;
 
-public class Blog {
+class Blog {
 
     private String title;
     private String desc;
     private String image;
+    private String username;
 
     public Blog() {
     }
 
-
-    public Blog(String title, String desc, String image) {
+    public Blog(String title, String desc, String image, String username) {
         this.title = title;
         this.desc = desc;
         this.image = image;
+        this.username = username;
     }
 
     public String getTitle() {
@@ -24,7 +25,7 @@ public class Blog {
         this.title = title;
     }
 
-    public String getDesc() {
+    String getDesc() {
         return desc;
     }
 
@@ -38,5 +39,13 @@ public class Blog {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

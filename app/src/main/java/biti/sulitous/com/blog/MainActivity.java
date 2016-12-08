@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +31,12 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView mBlogList;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseLike;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+
+    private boolean mProcessLike = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +58,10 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabase.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
+        mDatabaseLike.keepSynced(true);
 
         mBlogList = (RecyclerView) findViewById(R.id.blog_list);
         mBlogList.setHasFixedSize(true);
@@ -76,10 +83,56 @@ public class MainActivity extends AppCompatActivity {
                 mDatabase
         ) {
             @Override
-            protected void populateViewHolder(BlogViewHolder viewHolder, Blog model, int position) {
-                viewHolder.setTitle(model.getTitle());
-                viewHolder.setDesc(model.getDesc());
-                viewHolder.setImage(getApplicationContext(),model.getImage());
+            protected void populateViewHolder(BlogViewHolder viewHolder, Blog blog, int position) {
+
+                final String post_key =getRef(position).getKey();
+
+                viewHolder.setTitle(blog.getTitle());
+                viewHolder.setDesc(blog.getDesc());
+                viewHolder.setImage(getApplicationContext(),blog.getImage());
+                viewHolder.setUsername(blog.getUsername());
+                viewHolder.setLikeBtn(post_key);
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        Toast.makeText(MainActivity.this, post_key, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                viewHolder.mLikeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (mProcessLike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessLike = false;
+
+                                    } else {
+
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(true);
+                                        mProcessLike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                    }
+                });
             }
         };
         mBlogList.setAdapter(firebaseRecyclerAdapter);
@@ -111,10 +164,38 @@ public class MainActivity extends AppCompatActivity {
     public static class BlogViewHolder extends RecyclerView.ViewHolder{
 
         View mView;
+        ImageButton mLikeBtn;
+        private FirebaseAuth mAuth;
+        private DatabaseReference mDatabaseLike;
 
         BlogViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
+            mAuth = FirebaseAuth.getInstance();
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mDatabaseLike.keepSynced(true);
+
+            mLikeBtn = (ImageButton) mView.findViewById(R.id.like_btn);
+        }
+
+        void setLikeBtn(final String post_key){
+            mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())){
+
+                        mLikeBtn.setImageResource(R.drawable.like_red);
+                    }else {
+                        mLikeBtn.setImageResource(R.drawable.like_gray);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }
 
         void setTitle(String title) {
@@ -140,6 +221,11 @@ public class MainActivity extends AppCompatActivity {
                     Picasso.with(Ctx).load(image).into(imageView);
                 }
             });
+        }
+
+        void setUsername(String username) {
+            TextView post_username = (TextView) mView.findViewById(R.id.post_desc);
+            post_username.setText(username);
         }
     }
 
