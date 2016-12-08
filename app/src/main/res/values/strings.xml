@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Blog</string>
+    <string name="post">Add Post</string>
+    <string name="setting">Setting</string>
+    <string name="desc">Post Description…</string>
+    <string name="title">Post Title…</string>
+    <string name="submit">Submit Post</string>
+    <string name="register">Register</string>
+    <string name="name">Name…</string>
+    <string name="email">Email…</string>
+    <string name="password">Password…</string>
+    <string name="logout">Logout</string>
+</resources>
