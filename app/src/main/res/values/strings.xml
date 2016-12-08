@@ -15,4 +15,5 @@
     <string name="check_logging">Checking Logging…</string>
     <string name="setup">Finish Setup</string>
     <string name="finish">Finishing Setup…</string>
+    <string name="start">Starting Sign in…</string>
 </resources>
